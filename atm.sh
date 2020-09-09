@@ -7,9 +7,11 @@ ACCOUNT_TYPE=""
 AMOUNT_INDEX=""
 AMOUNT=""
 
+
 function displayDashedLine {
     echo "---------------------------------------------"
 }
+
 
 function getPin {
     displayDashedLine
@@ -18,6 +20,7 @@ function getPin {
 
     read PIN
 }
+
 
 function getTransactionType {
     displayDashedLine
@@ -32,6 +35,7 @@ function getTransactionType {
     read TRANSACTION_TYPE
 }
 
+
 function getAccountType {
     displayDashedLine
     echo "Please select account type"
@@ -42,6 +46,7 @@ function getAccountType {
 
     read ACCOUNT_TYPE
 }
+
 
 function getAmountIndex {
 
@@ -58,6 +63,7 @@ function getAmountIndex {
 
     getAmount
 }
+
 
 function getAmount {
     if [[ $AMOUNT_INDEX -eq "1" ]]
@@ -80,6 +86,7 @@ function getAmount {
     fi
 }
 
+
 function getCustomAmount {
     displayDashedLine
     echo "Please enter the amount you wish to withdraw"
@@ -92,13 +99,18 @@ function getCustomAmount {
     checkCustomAmount
 }
 
+
 function checkCustomAmount {
     if [[ $AMOUNT -lt "500" ]]
     then
+        echo ""
+        echo ""
         echo "ERROR: The amount you entered was lower than 500!"
         getCustomAmount
     elif [[ $AMOUNT -gt "50000" ]]
     then
+        echo ""
+        echo ""
         echo "ERROR: The amount you entered was greater than 50000!"
         getCustomAmount
     else
@@ -106,9 +118,11 @@ function checkCustomAmount {
     fi
 }
 
+
 function payAmount {
     echo "Please take your cash -- $AMOUNT"
 }
+
 
 getPin
 getTransactionType
