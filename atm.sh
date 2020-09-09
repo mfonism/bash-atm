@@ -1,11 +1,11 @@
 !/bin/bash
 
 
-PIN="0"
-TRANSACTION_TYPE="0"
-ACCOUNT_TYPE="0"
-AMOUNT_INDEX="0"
-AMOUNT="0"
+PIN=""
+TRANSACTION_TYPE=""
+ACCOUNT_TYPE=""
+AMOUNT_INDEX=""
+AMOUNT=""
 
 function displayDashedLine {
     echo "---------------------------------------------"
@@ -73,22 +73,46 @@ function getAmount {
     then
         AMOUNT="20000"
     else
-        AMOUNT="Custom Amount"
+        while [[ $AMOUNT -eq "" ]]
+        do
+            getCustomAmount
+        done
     fi
-
 }
 
-# function payAmount {
-#     echo "Please take your cash -- $AMOUNT"
-# }
+function getCustomAmount {
+    displayDashedLine
+    echo "Please enter the amount you wish to withdraw"
+    echo "Amount should not include space characters, commas, periods, and other non-numeric characters."
+    echo "Amount should be from 500 and upwards, but not more than 50000."
+    displayDashedLine
+
+    read AMOUNT
+
+    checkCustomAmount
+}
+
+function checkCustomAmount {
+    if [[ $AMOUNT -lt "500" ]]
+    then
+        echo "ERROR: The amount you entered was lower than 500!"
+        getCustomAmount
+    elif [[ $AMOUNT -gt "50000" ]]
+    then
+        echo "ERROR: The amount you entered was greater than 50000!"
+        getCustomAmount
+    else
+        continue
+    fi
+}
+
+function payAmount {
+    echo "Please take your cash -- $AMOUNT"
+}
 
 getPin
-echo $PIN
 getTransactionType
-echo $TRANSACTION_TYPE
 getAccountType
-echo $ACCOUNT_TYPE
 getAmountIndex
-echo $AMOUNT_INDEX
 getAmount
-echo $AMOUNT
+payAmount
