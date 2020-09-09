@@ -2,7 +2,8 @@
 
 
 PIN="0"
-TTYPE="0"
+TRANTYPE="0"
+ACCTYPE="0"
 
 function displayDashedLine {
     echo "---------------------------------------------"
@@ -24,10 +25,22 @@ function getTransactionType {
     echo "Select 3 to Change your PIN."
     echo "Select 4 to Buy Airtime"
     displayDashedLine
-    read TTYPE
+    read TRANTYPE
+}
+
+function getAccountType {
+    displayDashedLine
+    echo "Please select account type"
+    displayDashedLine
+    echo "Select 1 for Current"
+    echo "Select 2 for Savings"
+    displayDashedLine
+    read ACCTYPE
 }
 
 getPin
 echo $PIN
 getTransactionType
-echo $TTYPE
+echo $TRANTYPE
+getAccountType
+echo $ACCTYPE
