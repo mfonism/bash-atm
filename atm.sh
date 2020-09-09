@@ -1,11 +1,12 @@
 !/bin/bash
 
 
+PERFORM_ANOTHER_TRANSACTION="1"
 PIN=""
 TRANSACTION_TYPE=""
 ACCOUNT_TYPE=""
-AMOUNT_INDEX=""
-AMOUNT=""
+AMOUNT_KEY=""
+AMOUNT_VALUE=""
 
 
 function displayDashedLine {
@@ -14,6 +15,7 @@ function displayDashedLine {
 
 
 function getPin {
+    echo ""
     displayDashedLine
     echo "Welcome, please enter your pin at the prompt:"
     displayDashedLine
@@ -22,7 +24,8 @@ function getPin {
 }
 
 
-function getTransactionType {
+function performGenericTransaction {
+    echo ""
     displayDashedLine
     echo "Please select transaction type:"
     displayDashedLine
@@ -33,6 +36,21 @@ function getTransactionType {
     displayDashedLine
 
     read TRANSACTION_TYPE
+
+    if [[ $TRANSACTION_TYPE -eq "1" ]]
+    then
+        performWithdrawal
+    else
+        echo ""
+        echo "Decision tree to be implemented by EnKay."
+    fi
+}
+
+
+function performWithdrawal {
+    getAccountType
+    getWithdrawalAmount
+    payWithdrawalAmount
 }
 
 
@@ -48,7 +66,13 @@ function getAccountType {
 }
 
 
-function getAmountIndex {
+function getWithdrawalAmount {
+    getAmountKey
+    getAmountValue
+}
+
+
+function getAmountKey {
 
     displayDashedLine
     echo "Please select amount"
@@ -59,74 +83,90 @@ function getAmountIndex {
     echo "Select 4 for 20,000"
     echo "Select 5 to enter a custom amount"
 
-    read AMOUNT_INDEX
-
-    getAmount
+    read AMOUNT_KEY
 }
 
 
-function getAmount {
-    if [[ $AMOUNT_INDEX -eq "1" ]]
+function getAmountValue {
+    if [[ $AMOUNT_KEY -eq "1" ]]
     then
-        AMOUNT="5000"
-    elif [[ $AMOUNT_INDEX -eq "2" ]]
+        AMOUNT_VALUE="5000"
+    elif [[ $AMOUNT_KEY -eq "2" ]]
     then
-        AMOUNT="10000"
-    elif [[ $AMOUNT_INDEX -eq "3" ]]
+        AMOUNT_VALUE="10000"
+    elif [[ $AMOUNT_KEY -eq "3" ]]
     then
-        AMOUNT="15000"
-    elif [[ $AMOUNT_INDEX -eq "4" ]]
+        AMOUNT_VALUE="15000"
+    elif [[ $AMOUNT_KEY -eq "4" ]]
     then
-        AMOUNT="20000"
+        AMOUNT_VALUE="20000"
     else
-        while [[ $AMOUNT -eq "" ]]
+        AMOUNT_VALUE=""
+        while [[ $AMOUNT_VALUE -eq "" ]]
         do
-            getCustomAmount
+            getCustomWithdrawalAmount
         done
     fi
 }
 
 
-function getCustomAmount {
+function getCustomWithdrawalAmount {
     displayDashedLine
     echo "Please enter the amount you wish to withdraw"
     echo "Amount should not include space characters, commas, periods, and other non-numeric characters."
     echo "Amount should be from 500 and upwards, but not more than 50000."
     displayDashedLine
 
-    read AMOUNT
+    read AMOUNT_VALUE
 
-    checkCustomAmount
+    checkCustomWithdrawalAmount
 }
 
 
-function checkCustomAmount {
-    if [[ $AMOUNT -lt "500" ]]
+function checkCustomWithdrawalAmount {
+    if [[ $AMOUNT_VALUE -lt "500" ]]
     then
         echo ""
         echo ""
         echo "ERROR: The amount you entered was lower than 500!"
-        getCustomAmount
-    elif [[ $AMOUNT -gt "50000" ]]
+        getCustomWithdrawalAmount
+    elif [[ $AMOUNT_VALUE -gt "50000" ]]
     then
         echo ""
         echo ""
         echo "ERROR: The amount you entered was greater than 50000!"
-        getCustomAmount
+        getCustomWithdrawalAmount
     else
         continue
     fi
 }
 
 
-function payAmount {
-    echo "Please take your cash -- $AMOUNT"
+function payWithdrawalAmount {
+    echo ""
+    echo "Please take your cash -- $AMOUNT_VALUE"
+}
+
+function askToPerformAnotherTransaction {
+    echo ""
+    displayDashedLine
+    echo "Do you want to perform another transaction?"
+    displayDashedLine
+    echo "Select 1 to perform another transaction"
+    echo "Select 0 (or any other key) to end this session"
+    displayDashedLine
+
+    read PERFORM_ANOTHER_TRANSACTION
 }
 
 
-getPin
-getTransactionType
-getAccountType
-getAmountIndex
-getAmount
-payAmount
+while [[ $PERFORM_ANOTHER_TRANSACTION -eq "1" ]]
+do
+    getPin
+    performGenericTransaction
+    askToPerformAnotherTransaction
+done
+
+echo ""
+echo "Thank you for making use of our sevice today"
+echo "Goodbye, and we hope to see you later!"
